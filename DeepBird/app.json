@@ -1,0 +1,12 @@
+{
+  "name": "DeepBird",
+  "displayName": "DeepBird",
+  "expo": {
+    "name": "DeepBird",
+    "slug": "DeepBird",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}

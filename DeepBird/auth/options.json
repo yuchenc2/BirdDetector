@@ -1,0 +1,8 @@
+{
+    "keyPrefix": "AudioClips/",
+    "bucket": "deepbirdaudio",
+    "region": "us-east-2",
+    "accessKey": "AKIAQHCOS2BKFFIBSMDM",
+    "secretKey": "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",
+    "successActionStatus": 201
+}

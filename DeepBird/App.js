@@ -8,7 +8,7 @@ import { Audio } from 'expo-av';
 export default function App() {
   const [recording, setRecording] = React.useState();
   const [prediction, setPrediction] = React.useState("");
-  const options = require('~/awsauth/options.json');
+  const options = require('./auth/options.json');
 
   function generateUUID() {
     var d = new Date().getTime();

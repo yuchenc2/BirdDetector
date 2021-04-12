@@ -22,7 +22,7 @@ np.random.seed(42)
 
 # Prelim
 
-ROOT = Path.cwd().parent / "BirdComputer"
+ROOT = Path.cwd().parent / "BirdDetector"
 TEST_AUDIO_DIR = ROOT / "test_audio"
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -985,7 +985,7 @@ def prediction():
         warnings.filterwarnings("ignore")
         prediction_dfs_dict = defaultdict(list)
         for audio_id in progress_bar(unique_audio_id):
-            clip, _ = librosa.load(test_audio / (audio_id + ".mp3"),
+            clip, _ = librosa.load(str(test_audio / (audio_id + ".mp3")),
                                 sr=SR,
                                 mono=True,
                                 res_type="kaiser_fast")

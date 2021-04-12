@@ -2,6 +2,10 @@
 /venv
 /templates
 /test_audio
-/input.csv
-/submission.csv
-/test.csv
+input.csv
+submission.csv
+test.csv
+/models/*
+/venv/*
+/templates/*
+/test_audio/*

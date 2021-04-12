@@ -94,17 +94,12 @@ app = Flask(__name__)
 def index():
     return render_template("index.html", data="hey")
 
-@app.route("/prediction", methods=["POST"])
-def prediction():
+@app.route("/predict", methods=["GET"])
+def predict():
     
     audio = request.files['audio']
     AUDIOINPUT = TEST_AUDIO_DIR / audio.filename
     audio.save(AUDIOINPUT)
-
-    
-
-
-
 
     # Model
     # Audio Utilities

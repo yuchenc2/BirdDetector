@@ -32,7 +32,9 @@ scipy==1.6.2
 six==1.15.0
 SoundFile==0.10.3.post1
 threadpoolctl==2.1.0
+--find-links https://download.pytorch.org/whl/torch_stable.html
 torch==1.8.1+cpu
+--find-links https://download.pytorch.org/whl/torch_stable.html
 torchvision==0.9.1+cpu
 typing-extensions==3.7.4.3
 urllib3==1.26.4

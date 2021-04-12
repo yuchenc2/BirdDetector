@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 #Install pandas, numpy, libraosa, torch, torchvision
 
 from pathlib import Path #Included in Lambda
@@ -22,7 +22,7 @@ np.random.seed(42)
 
 # Prelim
 
-ROOT = Path.cwd().parent / "BirdComputer"
+ROOT = Path.cwd().parent / "BirdDetector"
 TEST_AUDIO_DIR = ROOT / "test_audio"
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -92,6 +92,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
+    # return "<h1>Welcome to our server!</h1>"
     return render_template("index.html", data="hey")
 
 @app.route("/prediction", methods=["POST"])
@@ -1154,6 +1155,7 @@ def prediction():
     return render_template("prediction.html", data=final_prediction)
 
 if __name__ == "__main__":
+    # app.run(threaded=True, port=5000)
     app.run(debug=True)
 
 

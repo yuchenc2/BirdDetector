@@ -9,6 +9,7 @@ export default function App() {
   const [recording, setRecording] = React.useState();
   const [prediction, setPrediction] = React.useState("");
   const options = require('./auth/options.json');
+  const https = require('https')
 
   function generateUUID() {
     var d = new Date().getTime();
@@ -63,6 +64,26 @@ export default function App() {
       // console.log(response.body);
     });
     console.log('Predicting bird species..')
+    const predictOptions = {
+      hostname: 'replacewithherokuurl.com',
+      port: 5000,
+      path: '/predict',
+      method: 'GET'
+    }
+
+    const req = https.request(predictOptions, res => {
+      console.log(`statusCode: ${res.statusCode}`)
+
+      res.on('data', d => {
+        setPrediction(d)
+      })
+    })
+
+    req.on('error', error => {
+      console.error(error)
+    })
+
+    req.end()
   }
 
 

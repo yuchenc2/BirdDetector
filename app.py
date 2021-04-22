@@ -11,35 +11,35 @@ from efficientnet_pytorch import EfficientNet
 from torchvision import transforms
 from torch.optim import Adam
 import torch.nn.functional as F
+import boto3
+
 
 
 ###############################################
 
-# s3 = boto3.resource('s3')
-# BUCKET_NAME = 'deepbd'
-# S3_FILE = 'Audio1.mp3'
-# LOCAL_NAME = 'Audio1.mp3'
-# bucket = s3.Bucket(BUCKET_NAME)
-
-# test downloading
-# bucket.download_file(S3_FILE, ./test_audio/LOCAL_NAME)
-
 
 app = Flask(__name__)
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def index():
     # return "<h1>Welcome to our server!</h1>"
 
-    return render_template("index.html", data="hey")
+#     return render_template("index.html", data="hey")
 
-@app.route("/prediction", methods=["POST"])
-def prediction():
+# @app.route("/prediction", methods=["POST"])
+# def prediction():
     
-    audio = request.files['audio']
+    # audio = request.files['audio']
     # audio.save(os.path.join("./test_audio/", audio.filename)) //works for local file storage
 
-    audio.save(audio.filename)
+    # audio.save(audio.filename)
+
+    s3 = boto3.resource('s3')
+    BUCKET_NAME = 'deepbd'
+    S3_FILE = 'Audio1.wav'
+    LOCAL_NAME = 'Audio1.wav'
+    bucket = s3.Bucket(BUCKET_NAME)
+    bucket.download_file(S3_FILE, LOCAL_NAME)
 
     class Hparams():
         def __init__(self):
@@ -163,7 +163,7 @@ def prediction():
         # Uploading a list of files for testing | Загружаем список файлов для тестирования
         # TEST_FOLDER = f'./test_audio/' // works for local file storage, have to change this line melspectr = get_melspectr
         
-        audio_main = str(audio.filename)
+        audio_main = str(LOCAL_NAME)
         final_audio_id = audio_main.rsplit( ".", 1 )[ 0 ]
 
         test_info = pd.DataFrame(data = {
@@ -323,7 +323,7 @@ def prediction():
     result = generate(all_model, epochs, hp.border, True)   
 
 
-    return render_template("prediction.html", data=result[0][1])
+    return jsonify(result[0][1])
 
 if __name__ == "__main__":
     # app.run(threaded=True, port=5000)

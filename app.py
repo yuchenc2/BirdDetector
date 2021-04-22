@@ -36,7 +36,7 @@ def index():
 def prediction():
     
     audio = request.files['audio']
-    # audio.save(os.path.join("./test_audio/", audio.filename))
+    # audio.save(os.path.join("./test_audio/", audio.filename)) //works for local file storage
 
     audio.save(os.path.join('/tmp/', audio.filename))
 
@@ -160,7 +160,7 @@ def prediction():
         preds = []
 
         # Uploading a list of files for testing | Загружаем список файлов для тестирования
-        TEST_FOLDER = f'./test_audio/'
+        # TEST_FOLDER = f'./test_audio/' // works for local file storage, have to change this line melspectr = get_melspectr
         
         audio_main = str(audio.filename)
         final_audio_id = audio_main.rsplit( ".", 1 )[ 0 ]
@@ -181,7 +181,7 @@ def prediction():
         with torch.no_grad():    
             for audio_id in unique_audio_id:
                 # Getting a spectrogram | Получаем спектрограмму
-                melspectr = get_melspectr(TEST_FOLDER + audio_id + ".wav")
+                melspectr = get_melspectr('/tmp/' + audio_id + ".wav")
                 melspectr = librosa.power_to_db(melspectr, amin=1e-7, ref=np.max)
                 melspectr = ((melspectr+80)/80).astype(np.float16)
                 

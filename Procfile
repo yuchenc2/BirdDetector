@@ -1,1 +1,1 @@
-web: gunicorn app:deepbirdapp
+web: gunicorn app:app

@@ -1,14 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 
 # # New test
-# s3 = boto3.resource('s3')
-# BUCKET_NAME = 'deepbd'
-# S3_FILE = 'Audio1.mp3'
-# LOCAL_NAME = 'Audio1.mp3'
-# bucket = s3.Bucket(BUCKET_NAME)
-
-# # test downloading
-# bucket.download_file(S3_FILE, ./test_audio/LOCAL_NAME)
 
 import numpy as np
 import librosa, random, torch, time, os
@@ -22,6 +14,15 @@ import torch.nn.functional as F
 
 
 ###############################################
+
+# s3 = boto3.resource('s3')
+# BUCKET_NAME = 'deepbd'
+# S3_FILE = 'Audio1.mp3'
+# LOCAL_NAME = 'Audio1.mp3'
+# bucket = s3.Bucket(BUCKET_NAME)
+
+# test downloading
+# bucket.download_file(S3_FILE, ./test_audio/LOCAL_NAME)
 
 
 app = Flask(__name__)
@@ -38,7 +39,7 @@ def prediction():
     audio = request.files['audio']
     # audio.save(os.path.join("./test_audio/", audio.filename)) //works for local file storage
 
-    audio.save(os.path.join('/tmp/', audio.filename))
+    audio.save(audio.filename)
 
     class Hparams():
         def __init__(self):
@@ -181,7 +182,7 @@ def prediction():
         with torch.no_grad():    
             for audio_id in unique_audio_id:
                 # Getting a spectrogram | Получаем спектрограмму
-                melspectr = get_melspectr('/tmp/' + audio_id + ".wav")
+                melspectr = get_melspectr(audio_id + ".wav")
                 melspectr = librosa.power_to_db(melspectr, amin=1e-7, ref=np.max)
                 melspectr = ((melspectr+80)/80).astype(np.float16)
                 

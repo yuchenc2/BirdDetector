@@ -179,7 +179,7 @@ def prediction():
         with torch.no_grad():    
             for audio_id in unique_audio_id:
                 # Getting a spectrogram | Получаем спектрограмму
-                melspectr = get_melspectr(TEST_FOLDER + audio_id + ".mp3")
+                melspectr = get_melspectr(TEST_FOLDER + audio_id + ".wav")
                 melspectr = librosa.power_to_db(melspectr, amin=1e-7, ref=np.max)
                 melspectr = ((melspectr+80)/80).astype(np.float16)
                 

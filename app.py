@@ -10,16 +10,8 @@ from flask import Flask, render_template, request, jsonify
 # # test downloading
 # bucket.download_file(S3_FILE, ./test_audio/LOCAL_NAME)
 
-import os
-from pathlib import Path
-import sys
-sys.path.append('../input/efficientnet-pytorch/EfficientNet-PyTorch/EfficientNet-PyTorch-master')
-import warnings
-warnings.filterwarnings("ignore", category=UserWarning)
-BASE_TEST_DIR = '../input/birdsong-recognition' if os.path.exists('../input/birdsong-recognition/test_audio') else '../input/my-birdcall-datasets'
-
 import numpy as np
-import librosa, random, torch, time
+import librosa, random, torch, time, os
 import pandas as pd
 import torch.nn as nn
 from torchvision import models
@@ -29,8 +21,6 @@ from torch.optim import Adam
 import torch.nn.functional as F
 
 
-ROOT = Path.cwd().parent / "BirdDetector"
-TEST_AUDIO_DIR = ROOT / "test_audio"
 ###############################################
 
 
@@ -46,8 +36,7 @@ def index():
 def prediction():
     
     audio = request.files['audio']
-    AUDIOINPUT = TEST_AUDIO_DIR / audio.filename
-    audio.save(AUDIOINPUT)
+    audio.save(os.path.join("./test_audio/", audio.filename))
 
     class Hparams():
         def __init__(self):

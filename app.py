@@ -36,7 +36,9 @@ def index():
 def prediction():
     
     audio = request.files['audio']
-    audio.save(os.path.join("./test_audio/", audio.filename))
+    # audio.save(os.path.join("./test_audio/", audio.filename))
+
+    audio.save(os.path.join('/tmp/', audio.filename))
 
     class Hparams():
         def __init__(self):

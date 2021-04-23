@@ -9,7 +9,6 @@ export default function App() {
   const [recording, setRecording] = React.useState();
   const [prediction, setPrediction] = React.useState("");
   const options = require('./auth/options.json');
-  const https = require('https')
 
   function generateUUID() {
     var d = new Date().getTime();
@@ -22,6 +21,7 @@ export default function App() {
   };
 
   async function startRecording() {
+    setPrediction("")
     try {
       console.log('Requesting permissions..');
       await Audio.requestPermissionsAsync();
@@ -34,7 +34,6 @@ export default function App() {
       await recording.prepareToRecordAsync(Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY);
       await recording.startAsync(); 
       setRecording(recording);
-      setPrediction("");
       console.log('Recording started');
     } catch (err) {
       console.error('Failed to start recording', err);
@@ -55,35 +54,29 @@ export default function App() {
     const file = {
       uri: recording.getURI(),
       name: generateUUID(),
-      type: 'audio/mp3'
+      type: 'audio/wav'
     }
+
     RNS3.put(file, options).then(response => {
       if (response.status !== 201){
         setPrediction("Failed to upload audio")
       }
-      // console.log(response.body);
     });
+
     console.log('Predicting bird species..')
-    const predictOptions = {
-      hostname: 'replacewithherokuurl.com',
-      port: 5000,
-      path: '/predict',
-      method: 'GET'
-    }
 
-    const req = https.request(predictOptions, res => {
-      console.log(`statusCode: ${res.statusCode}`)
-
-      res.on('data', d => {
-        setPrediction(d)
+    let response = await fetch('https://deepbirdapp.herokuapp.com/', {
+       method : 'GET',
+       headers: {
+        'file-name': file.name
+       }
       })
-    })
 
-    req.on('error', error => {
-      console.error(error)
-    })
+    let bird_prediction = await response.json()
 
-    req.end()
+    setPrediction(bird_prediction)
+    
+    console.log("DONE")
   }
 
 
@@ -96,7 +89,7 @@ export default function App() {
         title={recording ? 'Stop Recording' : 'Start Recording'}
         onPress={recording ? stopRecording : startRecording}
       />
-      <Text>{"Prediction: \n"}</Text>
+      <Text>{"Prediction: "}</Text>
       <Text>{prediction}</Text>
     </View>
   );

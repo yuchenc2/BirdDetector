@@ -50,6 +50,7 @@ def index():
     S3_FILE = file_name 
     LOCAL_NAME = file_name
 
+    # TODO: Need to delete these audio files downloaded to Heroku environment after done with the prediction
     bucket = s3.Bucket(BUCKET_NAME)
     bucket.download_file(S3_FILE, LOCAL_NAME)
 
@@ -338,6 +339,9 @@ def index():
                                                                                     hp.models_name[i],hp.chk[i],hp.count_bird[i])
         all_model.append(model)
     result = generate(all_model, epochs, hp.border, True)   
+
+    obj = s3.Object(BUCKET_NAME, file_name)
+    obj.delete()
 
     return jsonify(result[0][1])
 

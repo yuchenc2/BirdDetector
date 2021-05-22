@@ -12,7 +12,7 @@ from torchvision import transforms
 from torch.optim import Adam
 import torch.nn.functional as F
 import boto3
-
+from pydub import AudioSegment
 
 
 ###############################################
@@ -22,6 +22,13 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
 def index():
+
+
+
+    
+
+
+
     # return "<h1>Welcome to our server!</h1>"
 
 #     return render_template("index.html", data="hey")
@@ -32,14 +39,24 @@ def index():
     # audio = request.files['audio']
     # audio.save(os.path.join("./test_audio/", audio.filename)) //works for local file storage
 
-    # audio.save(audio.filename)
+
+
+    # LOCAL_NAME = request.headers.get('file-name')
 
     s3 = boto3.resource('s3')
-    BUCKET_NAME = 'deepbd'
-    S3_FILE = 'Audio1.wav'
-    LOCAL_NAME = 'Audio1.wav'
+    file_name = request.headers.get('file-name')
+    BUCKET_NAME = 'deepbirdaudio'
+
+    S3_FILE = file_name 
+    LOCAL_NAME = file_name
+
     bucket = s3.Bucket(BUCKET_NAME)
     bucket.download_file(S3_FILE, LOCAL_NAME)
+
+    # Remember to take pydub out of the requirement
+    sound = AudioSegment.from_file(LOCAL_NAME)
+    saved_name = LOCAL_NAME.rsplit( ".", 1 )[ 0 ]
+    sound.export(saved_name + '.wav', format="wav")
 
     class Hparams():
         def __init__(self):
@@ -182,7 +199,7 @@ def index():
         with torch.no_grad():    
             for audio_id in unique_audio_id:
                 # Getting a spectrogram | Получаем спектрограмму
-                melspectr = get_melspectr(audio_id + ".wav")
+                melspectr = get_melspectr(audio_id + '.wav')
                 melspectr = librosa.power_to_db(melspectr, amin=1e-7, ref=np.max)
                 melspectr = ((melspectr+80)/80).astype(np.float16)
                 
@@ -321,7 +338,6 @@ def index():
                                                                                     hp.models_name[i],hp.chk[i],hp.count_bird[i])
         all_model.append(model)
     result = generate(all_model, epochs, hp.border, True)   
-
 
     return jsonify(result[0][1])
 

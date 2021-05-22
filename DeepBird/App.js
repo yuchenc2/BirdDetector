@@ -31,7 +31,30 @@ export default function App() {
       }); 
       console.log('Starting recording..');
       const recording = new Audio.Recording();
-      await recording.prepareToRecordAsync(Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY);
+
+      const rs = {
+        android: {
+          extension: '.m4a',
+          outputFormat: Audio.RECORDING_OPTION_ANDROID_OUTPUT_FORMAT_MPEG_4,
+          audioEncoder: Audio.RECORDING_OPTION_ANDROID_AUDIO_ENCODER_AAC,
+          sampleRate: 44100,
+          numberOfChannels: 2,
+          bitRate: 128000,
+        },
+        ios: {
+          extension: '.aac',
+          outputFormat: Audio.RECORDING_OPTION_IOS_OUTPUT_FORMAT_MPEG4AAC,
+          audioQuality: Audio.RECORDING_OPTION_IOS_AUDIO_QUALITY_MAX,
+          sampleRate: 44100,
+          numberOfChannels: 2,
+          bitRate: 128000,
+          linearPCMBitDepth: 16,
+          linearPCMIsBigEndian: false,
+          linearPCMIsFloat: false,
+        },
+      };
+
+      await recording.prepareToRecordAsync(rs);
       await recording.startAsync(); 
       setRecording(recording);
       console.log('Recording started');
@@ -54,11 +77,12 @@ export default function App() {
     const file = {
       uri: recording.getURI(),
       name: generateUUID(),
-      type: 'audio/wav'
+      type: 'audio/aac'
     }
 
     RNS3.put(file, options).then(response => {
       if (response.status !== 201){
+        console.log('Failed to upload audio');
         setPrediction("Failed to upload audio")
       }
     });

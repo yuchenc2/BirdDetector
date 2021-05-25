@@ -42,9 +42,9 @@ export default function App() {
           bitRate: 128000,
         },
         ios: {
-          extension: '.aac',
-          outputFormat: Audio.RECORDING_OPTION_IOS_OUTPUT_FORMAT_MPEG4AAC,
-          audioQuality: Audio.RECORDING_OPTION_IOS_AUDIO_QUALITY_MAX,
+          extension: '.wav',
+          outputFormat: Audio.RECORDING_OPTION_IOS_OUTPUT_FORMAT_LINEARPCM,
+          audioQuality: Audio.RECORDING_OPTION_IOS_AUDIO_QUALITY_MIN,
           sampleRate: 44100,
           numberOfChannels: 2,
           bitRate: 128000,
@@ -77,7 +77,7 @@ export default function App() {
     const file = {
       uri: recording.getURI(),
       name: generateUUID(),
-      type: 'audio/aac'
+      type: 'audio/wav'
     }
 
     RNS3.put(file, options).then(response => {

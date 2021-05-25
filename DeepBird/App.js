@@ -89,6 +89,7 @@ export default function App() {
 
     console.log('Predicting bird species..')
 
+    console.log('File name: ', file.name);
     let response = await fetch('https://deepbirdapp.herokuapp.com/', {
        method : 'GET',
        headers: {

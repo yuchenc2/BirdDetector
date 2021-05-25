@@ -12,7 +12,6 @@ from torchvision import transforms
 from torch.optim import Adam
 import torch.nn.functional as F
 import boto3
-from pydub import AudioSegment
 
 
 ###############################################
@@ -48,16 +47,17 @@ def index():
     BUCKET_NAME = 'deepbirdaudio'
 
     S3_FILE = file_name 
-    LOCAL_NAME = file_name
+    LOCAL_NAME = file_name + '.wav'
 
     # TODO: Need to delete these audio files downloaded to Heroku environment after done with the prediction
     bucket = s3.Bucket(BUCKET_NAME)
     bucket.download_file(S3_FILE, LOCAL_NAME)
+    print("Local name =", LOCAL_NAME)
 
     # Remember to take pydub out of the requirement
-    sound = AudioSegment.from_file(LOCAL_NAME)
-    saved_name = LOCAL_NAME.rsplit( ".", 1 )[ 0 ]
-    sound.export(saved_name + '.wav', format="wav")
+    # sound = AudioSegment.from_file(LOCAL_NAME)
+    # saved_name = LOCAL_NAME.rsplit( ".", 1 )[ 0 ]
+    # sound.export(saved_name + '.wav', format="wav")
 
     class Hparams():
         def __init__(self):

@@ -46,12 +46,12 @@ def index():
     file_name = request.headers.get('file-name')
     BUCKET_NAME = 'deepbirdaudio'
 
-    S3_FILE = file_name 
     LOCAL_NAME = file_name + '.wav'
 
     # TODO: Need to delete these audio files downloaded to Heroku environment after done with the prediction
-    bucket = s3.Bucket(BUCKET_NAME)
-    bucket.download_file(S3_FILE, LOCAL_NAME)
+    # bucket = s3.Bucket(BUCKET_NAME)
+    s3.Object(BUCKET_NAME, 'audioclips/' + file_name).download_file(LOCAL_NAME)
+    # bucket.download_file('/audioclips/' + file_name, LOCAL_NAME)
     print("Local name =", LOCAL_NAME)
 
     # Remember to take pydub out of the requirement

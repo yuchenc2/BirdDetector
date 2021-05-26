@@ -8,6 +8,8 @@ This project uses Heroku, Flask, AWS, and React Native to implement the ML model
 https://user-images.githubusercontent.com/46701122/119613204-50024b00-be2f-11eb-8eb4-dda5814bcaba.mp4
 
 ## Getting Started
+* The React Native code is located in the "DeepBird" folder on the react_native_app git branch. The Flask prediction app is located in the "BirdDetector" folder on the Singlemodel git branch. 
+
 
 ### Dependencies
 

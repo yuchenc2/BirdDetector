@@ -80,22 +80,25 @@ export default function App() {
       type: 'audio/wav'
     }
 
-    RNS3.put(file, options).then(response => {
+    let uploaded = await RNS3.put(file, options).then(response => {
       if (response.status !== 201){
         console.log('Failed to upload audio');
         setPrediction("Failed to upload audio")
       }
+
     });
+    
+    console.log(uploaded);
 
     console.log('Predicting bird species..')
 
-    console.log('File name: ', file.name);
+    console.log('File name: ', file.name)
     let response = await fetch('https://deepbirdapp.herokuapp.com/', {
        method : 'GET',
        headers: {
         'file-name': file.name
        }
-      })
+    })
 
     let bird_prediction = await response.json()
 
